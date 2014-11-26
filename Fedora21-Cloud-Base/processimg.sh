@@ -50,13 +50,6 @@ wget $XZIMGURL && unxz $XZIMG
 # Convert to GPT
 sgdisk -g -p $IMG
 
-# Find what loop device will be used
-# Create a new loop device to be used
-LOOPDEV=$(losetup -f)
-#LOOPDEV=/dev/loop8
-LOOPDEVPART1=$LOOPDEV
-#mknod -m660 /dev/loop8 b 7 8
-
 # Find the starting byte and the total bytes in the 1st partition
 PAIRS=$(partx --pairs $IMG)
 eval `echo "$PAIRS" | head -n 1 | sed 's/ /\n/g'`
@@ -64,13 +57,14 @@ STARTBYTES=$((512*START))   # 512 bytes * the number of the start sector
 TOTALBYTES=$((512*SECTORS)) # 512 bytes * the number of sectors in the partition
 
 # Loopmount the first partition of the device
+LOOPDEV=$(losetup -f)
 losetup -v --offset $STARTBYTES --sizelimit $TOTALBYTES $LOOPDEV $IMG
 
 # Add in DOROOT label to the root partition
-e2label $LOOPDEVPART1 DOROOT
+e2label $LOOPDEV 'DOROOT'
 
 # Mount it on $TMPMNT
-mount $LOOPDEVPART1 $TMPMNT
+mount $LOOPDEV $TMPMNT
 
 # Get the DO datasource and store in the right place
 # NOTE: wget doesn't work inside chroot so doing it here
