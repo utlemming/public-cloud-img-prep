@@ -86,7 +86,7 @@ datasource:
    retries: 5
    timeout: 10
 vendor_data:
-   enabled: False
+   enabled: True
 END
 
 # TODO: restore selinux permissions
