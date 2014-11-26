@@ -51,6 +51,9 @@ wget $XZIMGURL && unxz $XZIMG
 sgdisk -g -p $IMG
 
 # Find the starting byte and the total bytes in the 1st partition
+# NOTE: normally would be able to use partx/kpartx directly to loopmount
+#       the disk image and add the partitions, but inside of docker I found
+#       that wasn't working quite right so I resorted to this manual approach.
 PAIRS=$(partx --pairs $IMG)
 eval `echo "$PAIRS" | head -n 1 | sed 's/ /\n/g'`
 STARTBYTES=$((512*START))   # 512 bytes * the number of the start sector
