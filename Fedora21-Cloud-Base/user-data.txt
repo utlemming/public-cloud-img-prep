@@ -1,0 +1,16 @@
+#cloud-config
+
+# This file represents the current user-data that is needed to get
+# a fedora 21 droplet that acts as you would expect it to.
+
+# Need to enable ssh as root; fedora has it disabled by default
+disable_root: 0
+
+# DO takes care of resizing disk. Don't attempt to growpart 
+growpart:
+  mode: off
+
+# Don't use vendor data right now as it is specific to ubuntu
+vendor_data:
+  enabled: False
+
