@@ -92,7 +92,7 @@ END
 
 # TODO: restore selinux permissions
 # For now set selinux to permissive
-sed -i 's/SELINUX=enforcing/SELINUX=permissive/' /etc/sysconfig/selinux
+sed -i 's/SELINUX=enforcing/SELINUX=permissive/' /etc/selinux/config
 
 # Exit the chroot
 exit
