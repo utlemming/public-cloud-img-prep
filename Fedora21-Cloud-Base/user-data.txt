@@ -9,8 +9,3 @@ disable_root: 0
 # DO takes care of resizing disk. Don't attempt to growpart 
 growpart:
   mode: off
-
-# Don't use vendor data right now as it is specific to ubuntu
-vendor_data:
-  enabled: False
-
