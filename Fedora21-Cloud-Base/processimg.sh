@@ -100,6 +100,7 @@ exit
 # umount and tear down loop device
 umount $TMPMNT
 losetup -d $LOOPDEV
+rm $LOOPDEV
 
 # finally, cp $IMG into /tmp/doimg/ on the host
 cp -a $IMG /tmp/doimg/ 
