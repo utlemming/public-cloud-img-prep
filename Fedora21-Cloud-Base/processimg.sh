@@ -35,8 +35,12 @@ XZIMGURL='http://download.fedoraproject.org/pub/fedora/linux/releases/21/Cloud/I
 XZIMG=$(basename $XZIMGURL) # Just the file name
 IMG=${XZIMG:0:-3}           # Pull .xz off of the end
 
-# URL for upstream DO data source file.
+# URL/File location for upstream DO data source file.
 DODATASOURCEURL='http://bazaar.launchpad.net/~cloud-init-dev/cloud-init/trunk/download/head:/datasourcedigitaloce-20141016153006-gm8n01q6la3stalt-1/DataSourceDigitalOcean.py'
+export DODATASOURCEFILE='/usr/lib/python2.7/site-packages/cloudinit/sources/DataSourceDigitalOcean.py'
+
+# File location for DO cloud config
+export DOCLOUDCFGFILE='/etc/cloud/cloud.cfg.d/01_digitalocean.cfg'
 
 # Create workdir and cd to it
 mkdir -p $TMPMNT && cd $WORKDIR
@@ -71,16 +75,14 @@ e2label $LOOPDEV 'DOROOT'
 mount $LOOPDEV $TMPMNT
 
 # Get the DO datasource and store in the right place
-# NOTE: wget doesn't work inside chroot so doing it here
-pushd $TMPMNT/usr/lib/python2.7/site-packages/cloudinit/sources/
-wget $DODATASOURCEURL
-popd
+# NOTE: curl doesn't work inside chroot so doing it here
+curl $DODATASOURCEURL > ${TMPMNT}/${DODATASOURCEFILE}
 
 # chroot into disk Image
 chroot $TMPMNT
 
 # Put in place the config from Digital Ocean
-cat << END > /etc/cloud/cloud.cfg.d/01_digitalocean.cfg 
+cat << END > $DOCLOUDCFGFILE
 datasource_list: [ DigitalOcean, None ]
 datasource:
  DigitalOcean:
@@ -90,9 +92,9 @@ vendor_data:
    enabled: True
 END
 
-# TODO: restore selinux permissions
-# For now set selinux to permissive
-sed -i 's/SELINUX=enforcing/SELINUX=permissive/' /etc/selinux/config
+# restore selinux permissions (from inside chroot)
+chcon system_u:object_r:etc_t:s0 $DOCLOUDCFGFILE
+chcon system_u:object_r:lib_t:s0 $DODATASOURCEFILE
 
 # Exit the chroot
 exit
