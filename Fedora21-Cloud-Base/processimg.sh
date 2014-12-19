@@ -96,6 +96,12 @@ END
 chcon system_u:object_r:etc_t:s0 $DOCLOUDCFGFILE
 chcon system_u:object_r:lib_t:s0 $DODATASOURCEFILE
 
+# Set selinux to permissive because some of DO's older infrastructure in
+# some datacenters do things that make selinux complain. The newer datacenters
+# support selinux and if the user wants selinux in those datacenters they
+# can change this back to enforcing.
+sed -i 's/SELINUX=enforcing/SELINUX=permissive/' /etc/selinux/config
+
 # Exit the chroot
 exit
 
