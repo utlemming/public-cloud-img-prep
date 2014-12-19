@@ -90,6 +90,10 @@ datasource:
    timeout: 10
 vendor_data:
    enabled: True
+disable_root: False
+ssh_pwauth: True
+growpart:
+   mode: off
 END
 
 # restore selinux permissions (from inside chroot)
