@@ -1,1 +1,6 @@
-# DO is now providing no vendor data to fedora hosts.
+#cloud-config
+
+-disable_root: False
+-ssh_pwauth: True
+-growpart:
+-   mode: off

@@ -40,7 +40,7 @@ DODATASOURCEURL='http://bazaar.launchpad.net/~cloud-init-dev/cloud-init/trunk/do
 export DODATASOURCEFILE='/usr/lib/python2.7/site-packages/cloudinit/sources/DataSourceDigitalOcean.py'
 
 # File location for DO cloud config
-export DOCLOUDCFGFILE='/etc/cloud/cloud.cfg.d/01_digitalocean.cfg'
+export DOCLOUDCFGFILE='/etc/cloud/cloud.cfg'
 
 # Create workdir and cd to it
 mkdir -p $TMPMNT && cd $WORKDIR
@@ -83,6 +83,7 @@ chroot $TMPMNT
 
 # Put in place the config from Digital Ocean
 cat << END > $DOCLOUDCFGFILE
+# Replace the fedora cloud.cfg with a minimal cloud.cfg from DO
 datasource_list: [ DigitalOcean, None ]
 datasource:
  DigitalOcean:
@@ -90,10 +91,6 @@ datasource:
    timeout: 10
 vendor_data:
    enabled: True
-disable_root: False
-ssh_pwauth: True
-growpart:
-   mode: off
 END
 
 # restore selinux permissions (from inside chroot)
