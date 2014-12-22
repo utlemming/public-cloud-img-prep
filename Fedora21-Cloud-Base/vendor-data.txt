@@ -1,6 +1,53 @@
 #cloud-config
+disable_root: False
+manage_etc_hosts: True
+ssh_pwauth: True
+growpart:
+ mode: off
 
--disable_root: False
--ssh_pwauth: True
--growpart:
--   mode: off
+mount_default_fields: [~, ~, 'auto', 'defaults,nofail', '0', '2']
+
+cloud_init_modules:
+ - migrator
+ - bootcmd
+ - write-files
+ - growpart
+ - resizefs
+ - set_hostname
+ - update_hostname
+ - [ update_etc_hosts, once-per-instance ]
+ - rsyslog
+ - users-groups
+ - ssh
+
+cloud_config_modules:
+ - mounts
+ - locale
+ - set-passwords
+ - yum-add-repo
+ - package-update-upgrade-install
+ - timezone
+ - puppet
+ - chef
+ - salt-minion
+ - mcollective
+ - disable-ec2-metadata
+ - runcmd
+
+cloud_final_modules:
+ - rightscale_userdata
+ - scripts-per-once
+ - scripts-per-boot
+ - scripts-per-instance
+ - scripts-user
+ - ssh-authkey-fingerprints
+ - keys-to-console
+ - phone-home
+ - final-message
+
+system_info:
+  distro: fedora
+  paths:
+    cloud_dir: /var/lib/cloud
+    templates_dir: /etc/cloud/templates
+  ssh_svcname: sshd
