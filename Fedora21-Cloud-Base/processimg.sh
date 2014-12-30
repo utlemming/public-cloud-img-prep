@@ -91,6 +91,13 @@ datasource:
    timeout: 10
 vendor_data:
    enabled: True
+syslog_fix_perms: ~
+system_info:
+  distro: fedora
+  paths:
+    cloud_dir: /var/lib/cloud
+    templates_dir: /etc/cloud/templates
+  ssh_svcname: sshd
 END
 
 # restore selinux permissions (from inside chroot)
