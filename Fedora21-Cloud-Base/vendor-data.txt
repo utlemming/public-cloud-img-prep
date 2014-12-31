@@ -1,12 +1,32 @@
 #cloud-config
-disable_root: False
-manage_etc_hosts: True
-ssh_pwauth: True
+
+# override the system_info here so that the fedora user
+# does not get created.
+system_info:
+    default_user:
+    distro: fedora
+    paths:
+        cloud_dir: /var/lib/cloud
+        templates_dir: /etc/cloud/templates
+    ssh_svcname: sshd
+
+# do not need to rely on cloud-init to resize images because
+# the Digital Ocean infrastructure takes care of this.
 growpart:
- mode: off
+    mode: off
 
-mount_default_fields: [~, ~, 'auto', 'defaults,nofail', '0', '2']
+# enable password auth (for now)
+ssh_pwauth: True
 
+# using root user (for now)
+disable_root: False
+
+# populate /etc/hosts with hostname alias for loopback devs
+manage_etc_hosts: True
+
+# override cloud_init_modules so that we can specify 'once-per-instance'
+# for update_etc_hosts so that if the user makes changes it won't get
+# clobbered on reboot.
 cloud_init_modules:
  - migrator
  - bootcmd
@@ -20,34 +40,3 @@ cloud_init_modules:
  - users-groups
  - ssh
 
-cloud_config_modules:
- - mounts
- - locale
- - set-passwords
- - yum-add-repo
- - package-update-upgrade-install
- - timezone
- - puppet
- - chef
- - salt-minion
- - mcollective
- - disable-ec2-metadata
- - runcmd
-
-cloud_final_modules:
- - rightscale_userdata
- - scripts-per-once
- - scripts-per-boot
- - scripts-per-instance
- - scripts-user
- - ssh-authkey-fingerprints
- - keys-to-console
- - phone-home
- - final-message
-
-system_info:
-  distro: fedora
-  paths:
-    cloud_dir: /var/lib/cloud
-    templates_dir: /etc/cloud/templates
-  ssh_svcname: sshd
