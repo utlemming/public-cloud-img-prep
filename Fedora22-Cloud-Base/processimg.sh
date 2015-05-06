@@ -25,13 +25,13 @@
 set -eux 
 mkdir -p /tmp/doimg/
 
-docker run -i --rm --privileged -v /tmp/doimg:/tmp/doimg fedora:20 bash << 'EOF'
+docker run -i --rm --privileged -v /tmp/doimg:/tmp/doimg fedora:21 bash << 'EOF'
 set -eux
-WORKDIR=/tmp/tmp
-TMPMNT=/tmp/tmp/mnt
+WORKDIR=/workdir
+TMPMNT=/workdir/tmp/mnt
 
 # Vars for the image
-XZIMGURL='http://download.fedoraproject.org/pub/fedora/linux/releases/21/Cloud/Images/x86_64/Fedora-Cloud-Base-20141203-21.x86_64.raw.xz'
+XZIMGURL='http://dl.fedoraproject.org/pub/alt/stage/22_TC1/Cloud_Images/x86_64/Images/Fedora-Cloud-Base-22_TC1-20150428.x86_64.raw.xz'
 XZIMG=$(basename $XZIMGURL) # Just the file name
 IMG=${XZIMG:0:-3}           # Pull .xz off of the end
 
@@ -46,7 +46,7 @@ export DOCLOUDCFGFILE='/etc/cloud/cloud.cfg.d/01_digitalocean.cfg'
 mkdir -p $TMPMNT && cd $WORKDIR
 
 # Get any additional rpms that we need
-yum install -y gdisk wget e2fsprogs
+yum install -y gdisk wget
 
 # Get the xz image and decompress it
 wget $XZIMGURL && unxz $XZIMG
