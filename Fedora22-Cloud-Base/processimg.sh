@@ -63,10 +63,11 @@ eval `echo "$PAIRS" | head -n 1 | sed 's/ /\n/g'`
 STARTBYTES=$((512*START))   # 512 bytes * the number of the start sector
 TOTALBYTES=$((512*SECTORS)) # 512 bytes * the number of sectors in the partition
 
+# Discover which loopback device will be used
+LOOPDEV=$(losetup -f)
+
 # Loopmount the first partition of the device
-LOOPDEV=/dev/loop8
-mknod -m660 /dev/loop8 b 7 8
-losetup -v --offset $STARTBYTES --sizelimit $TOTALBYTES $LOOPDEV $IMG
+losetup -v -f --offset $STARTBYTES --sizelimit $TOTALBYTES $IMG
 
 # Add in DOROOT label to the root partition
 e2label $LOOPDEV 'DOROOT'
