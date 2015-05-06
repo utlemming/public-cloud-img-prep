@@ -76,14 +76,11 @@ e2label $LOOPDEV 'DOROOT'
 mount $LOOPDEV $TMPMNT
 
 # Get the DO datasource and store in the right place
-# NOTE: curl doesn't work inside chroot so doing it here
 curl $DODATASOURCEURL > ${TMPMNT}/${DODATASOURCEFILE}
-
-# chroot into disk Image
-chroot $TMPMNT
+chcon system_u:object_r:lib_t:s0 ${TMPMNT}/${DODATASOURCEFILE}
 
 # Put in place the config from Digital Ocean
-cat << END > $DOCLOUDCFGFILE
+cat << END > ${TMPMNT}/${DOCLOUDCFGFILE}
 datasource_list: [ DigitalOcean, None ]
 datasource:
  DigitalOcean:
@@ -92,13 +89,7 @@ datasource:
 vendor_data:
    enabled: True
 END
-
-# restore selinux permissions (from inside chroot)
-chcon system_u:object_r:etc_t:s0 $DOCLOUDCFGFILE
-chcon system_u:object_r:lib_t:s0 $DODATASOURCEFILE
-
-# Exit the chroot
-exit
+chcon system_u:object_r:etc_t:s0 ${TMPMNT}/${DOCLOUDCFGFILE}
 
 # umount and tear down loop device
 umount $TMPMNT
