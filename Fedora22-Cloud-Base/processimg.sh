@@ -63,11 +63,18 @@ eval `echo "$PAIRS" | head -n 1 | sed 's/ /\n/g'`
 STARTBYTES=$((512*START))   # 512 bytes * the number of the start sector
 TOTALBYTES=$((512*SECTORS)) # 512 bytes * the number of sectors in the partition
 
-# Discover which loopback device will be used
+# Discover the next available loopback device
 LOOPDEV=$(losetup -f)
+LOMAJOR=''
+
+# Make the loopback device if it doesn't exist already
+if [ ! -e $LOOPDEV ]; then
+    LOMAJOR=${LOOPDEV#/dev/loop} # Get just the number
+    mknod -m660 $LOOPDEV b 7 $LOMAJOR
+fi
 
 # Loopmount the first partition of the device
-losetup -v -f --offset $STARTBYTES --sizelimit $TOTALBYTES $IMG
+losetup -v --offset $STARTBYTES --sizelimit $TOTALBYTES $LOOPDEV $IMG
 
 # Add in DOROOT label to the root partition
 e2label $LOOPDEV 'DOROOT'
@@ -94,7 +101,7 @@ chcon system_u:object_r:etc_t:s0 ${TMPMNT}/${DOCLOUDCFGFILE}
 # umount and tear down loop device
 umount $TMPMNT
 losetup -d $LOOPDEV
-rm $LOOPDEV
+[ ! -z $LOMAJOR ] && rm $LOOPDEV #Only remove if we created it
 
 # finally, cp $IMG into /tmp/doimg/ on the host
 cp -a $IMG /tmp/doimg/ 
