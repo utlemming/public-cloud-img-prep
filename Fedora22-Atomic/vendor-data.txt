@@ -1,0 +1,42 @@
+#cloud-config
+
+# override the system_info here so that the fedora user
+# does not get created.
+system_info:
+    default_user:
+    distro: fedora
+    paths:
+        cloud_dir: /var/lib/cloud
+        templates_dir: /etc/cloud/templates
+    ssh_svcname: sshd
+
+# do not need to rely on cloud-init to resize images because
+# the Digital Ocean infrastructure takes care of this.
+growpart:
+    mode: off
+
+# enable password auth (for now)
+ssh_pwauth: True
+
+# using root user (for now)
+disable_root: False
+
+# populate /etc/hosts with hostname alias for loopback devs
+manage_etc_hosts: True
+
+# override cloud_init_modules so that we can specify 'once-per-instance'
+# for update_etc_hosts so that if the user makes changes it won't get
+# clobbered on reboot.
+cloud_init_modules:
+ - migrator
+ - bootcmd
+ - write-files
+ - growpart
+ - resizefs
+ - set_hostname
+ - update_hostname
+ - [ update_etc_hosts, once-per-instance ]
+ - rsyslog
+ - users-groups
+ - ssh
+
