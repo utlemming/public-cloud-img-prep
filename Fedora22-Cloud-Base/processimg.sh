@@ -51,32 +51,6 @@ yum install -y gdisk wget
 # Get the xz image and decompress it
 wget $XZIMGURL && unxz $XZIMG
 
-# Convert to hybrid GPT/MBR.. The sequence is:
-#   r       recovery and transformation options (experts only)
-#   h       make hybrid MBR
-#   1       Type GPT partition numbers to be added to the hybrid MBR
-#   Y       Set the bootable flag? (Y/N): Y
-#   83      Enter an MBR hex code (default 83):
-#   N       Unused partition space(s) found. Use one to protect more partitions? (Y/N):
-#   o       print protective MBR data (purely informational)
-#   p       print the partition table (purely informational)
-#   w       write table to disk and exit
-#   Y       About to write GPT data. Do you want to proceed? (Y/N):
-# NOTE: Can't use sgdisk -h 1 for this because it doesn't set bootable flag
-gdisk $IMG <<EOF2
-r
-h
-1
-Y
-83
-Y
-N
-o
-p
-w
-Y
-EOF2
-
 # Find the starting byte and the total bytes in the 1st partition
 # NOTE: normally would be able to use partx/kpartx directly to loopmount
 #       the disk image and add the partitions, but inside of docker I found
