@@ -51,6 +51,12 @@ yum install -y gdisk wget
 # Get the xz image and decompress it
 wget $XZIMGURL && unxz $XZIMG
 
+# GPT stores a backup in the last 33 sectors of the disk. Since our
+# partition table runs all the way up until the end of the disk we
+# must extend the disk by 33 sectors (33*512bytes). Got this info from:
+# http://askubuntu.com/questions/150378/how-to-fix-mbr-partition-prior-to-ubuntu-installation-a-partition-overlaps-gpt
+dd if=/dev/zero of=$IMG bs=512 count=33 oflag=append conv=notrunc
+
 # Convert to hybrid GPT/MBR.. The sequence is:
 #   r       recovery and transformation options (experts only)
 #   h       make hybrid MBR
