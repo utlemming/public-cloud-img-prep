@@ -10,11 +10,6 @@ system_info:
         templates_dir: /etc/cloud/templates
     ssh_svcname: sshd
 
-# do not need to rely on cloud-init to resize images because
-# the Digital Ocean infrastructure takes care of this.
-growpart:
-    mode: off
-
 # enable password auth (for now)
 ssh_pwauth: True
 
