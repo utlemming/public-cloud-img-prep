@@ -1,4 +1,6 @@
-fedora-digital-ocean-img-prep
-=============================
+public-cloud-img-prep
+=====================
 
-scripts to prepare Fedora cloud images for Digital Ocean
+Scripts to prepare Fedora/CentOS cloud images for public cloud
+providers. These are here for transparency and may be temporary
+until upstream makes an official image for the provider. 
