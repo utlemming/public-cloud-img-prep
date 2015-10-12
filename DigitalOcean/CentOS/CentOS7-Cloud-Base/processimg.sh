@@ -52,7 +52,7 @@ yum install -y gdisk wget qemu-img xfsprogs
 
 # Get the xz image, verify, and decompress the contents
 wget $QCOWXZIMGURL 
-imgsum=$(sha256sum $QCOWXZIMG)
+imgsum=$(sha256sum $QCOWXZIMG | cut -d " " -f 1)
 if [ "$imgsum" != "$QCOWXZIMGSUM" ]; then
     echo "Checksum doesn't match: $imgsum"
     exit 1
