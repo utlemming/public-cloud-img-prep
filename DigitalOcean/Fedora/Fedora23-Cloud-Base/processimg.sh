@@ -31,9 +31,9 @@ WORKDIR=/workdir
 TMPMNT=/workdir/tmp/mnt
 
 # Vars for the image
-XZIMGURL='http://dl.fedoraproject.org/pub/alt/stage/23_RC9/Cloud_Images/x86_64/Images/Fedora-Cloud-Base-23-20151029.x86_64.raw.xz'
+XZIMGURL='http://dl.fedoraproject.org/pub/alt/stage/23_RC10/Cloud_Images/x86_64/Images/Fedora-Cloud-Base-23-20151030.x86_64.raw.xz'
 XZIMG=$(basename $XZIMGURL) # Just the file name
-XZIMGSUM='a9e33ba2333791c790c37cc1f003cc020feb47bb33f46fbf77acb11ecb3035f1'
+XZIMGSUM='a875f20b95c58683079e2e670d0f113e67044aa2be3981f08fd5aeec993abd2f'
 IMG=${XZIMG:0:-3}           # Pull .xz off of the end
 
 # File location for DO cloud config
