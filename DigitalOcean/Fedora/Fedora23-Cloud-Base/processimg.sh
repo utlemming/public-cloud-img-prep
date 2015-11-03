@@ -31,7 +31,7 @@ WORKDIR=/workdir
 TMPMNT=/workdir/tmp/mnt
 
 # Vars for the image
-XZIMGURL='http://dl.fedoraproject.org/pub/alt/stage/23_RC10/Cloud_Images/x86_64/Images/Fedora-Cloud-Base-23-20151030.x86_64.raw.xz'
+XZIMGURL='https://download.fedoraproject.org/pub/fedora/linux/releases/23/Cloud/x86_64/Images/Fedora-Cloud-Base-23-20151030.x86_64.raw.xz'
 XZIMG=$(basename $XZIMGURL) # Just the file name
 XZIMGSUM='a875f20b95c58683079e2e670d0f113e67044aa2be3981f08fd5aeec993abd2f'
 IMG=${XZIMG:0:-3}           # Pull .xz off of the end
