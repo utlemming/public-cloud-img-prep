@@ -31,8 +31,8 @@ WORKDIR=/workdir
 TMPMNT=/workdir/tmp/mnt
 
 # Vars for the image
-QCOWXZIMGURL='http://cloud.centos.org/centos/7/images/CentOS-7-x86_64-GenericCloud-1602.qcow2.xz'
-QCOWXZIMGSUM='dd0f5e610e7c5ffacaca35ed7a78a19142a588f4543da77b61c1fb0d74400471'
+QCOWXZIMGURL='http://cloud.centos.org/centos/7/images/CentOS-7-x86_64-GenericCloud-1604.qcow2.xz'
+QCOWXZIMGSUM='ac832790bee379fe28f814e22f607f01111fff366fe08f81e14f35dd19bcec53'
 QCOWXZIMG=$(basename $QCOWXZIMGURL) # Just the file name
 QCOWIMG=${QCOWXZIMG:0:-3}           # Pull .xz off of the end
 IMG="${QCOWIMG:0:-6}.raw"    # Pull off .qcow2 and add .raw
