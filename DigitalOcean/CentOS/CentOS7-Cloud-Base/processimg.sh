@@ -62,6 +62,9 @@ unxz $QCOWXZIMG
 # Convert the qcow2 into a raw disk
 qemu-img convert -f qcow2 -O raw $QCOWIMG $IMG
 
+# Convert to GPT (needed for DOs "external kernel management")
+sgdisk -g -p $IMG
+
 # Find the starting byte and the total bytes in the 1st partition
 # NOTE: normally would be able to use partx/kpartx directly to loopmount
 #       the disk image and add the partitions, but inside of docker I found
