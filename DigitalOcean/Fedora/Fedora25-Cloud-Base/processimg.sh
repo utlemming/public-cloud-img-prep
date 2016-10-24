@@ -26,6 +26,14 @@ set -eu
 mkdir -p /tmp/doimg/
 cd /tmp/doimg
 
+# need wget/sha256sum/unxz for this script
+for exe in wget sha256sum unxz; do
+    if ! which $exe >/dev/null; then
+        echo "You need $exe to run this program"
+        exit 1
+    fi
+done
+
 # Vars for the image
 XZIMGURL='https://kojipkgs.fedoraproject.org//work/tasks/7797/16177797/Fedora-Cloud-Base-25-20161023.n.0.x86_64.raw.xz'
 XZIMG=$(basename $XZIMGURL) # Just the file name
