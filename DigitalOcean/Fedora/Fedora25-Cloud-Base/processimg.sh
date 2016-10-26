@@ -80,6 +80,7 @@ wget -O ${TMPMNT}/foo.rpm https://kojipkgs.fedoraproject.org//packages/cloud-ini
 chroot ${TMPMNT}/
 rpm -Uvh foo.rpm
 rm foo.rpm
+touch /.autorelabel
 exit
 
 # umount and tear down loop device
