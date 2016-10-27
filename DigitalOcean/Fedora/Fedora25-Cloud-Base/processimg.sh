@@ -40,7 +40,7 @@ IMG=${XZIMG:0:-3}           # Pull .xz off of the end
 mkdir -p $TMPMNT && cd $WORKDIR
 
 # Get any additional rpms that we need
-dnf install -y gdisk wget xz
+dnf install -y gdisk wget xz patch
 
 # Get the xz image, verify, and decompress the contents
 wget $XZIMGURL
@@ -76,6 +76,11 @@ losetup -v --offset $STARTBYTES --sizelimit $TOTALBYTES $LOOPDEV $IMG
 # Mount it on $TMPMNT
 mount $LOOPDEV $TMPMNT
 
+cat > ${TMPMNT}/etc/cloud/cloud.cfg.d/99-digitalocean.cfg <<EOM
+# Disable network config, since its broken badly
+network: {config: disabled}
+EOM
+
 wget -O ${TMPMNT}/foo.rpm https://kojipkgs.fedoraproject.org//packages/cloud-init/0.7.8/3.fc25/noarch/cloud-init-0.7.8-3.fc25.noarch.rpm
 chroot ${TMPMNT}/
 rpm -Uvh foo.rpm
@@ -89,6 +94,6 @@ losetup -d $LOOPDEV
 [ ! -z $LOMAJOR ] && rm -f $LOOPDEV #Only remove if we created it
 
 # finally, cp $IMG into /tmp/doimg/ on the host
-cp -a $IMG /tmp/doimg/ 
+cp -a $IMG /tmp/doimg/
 
 EOF
